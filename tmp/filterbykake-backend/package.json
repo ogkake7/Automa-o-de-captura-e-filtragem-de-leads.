@@ -1,0 +1,20 @@
+{
+  "name": "filterbykake-backend",
+  "version": "1.0.0",
+  "description": "Backend do FilterByKake - integracoes reais com Apify e WhatsApp (Baileys)",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.9",
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "qrcode": "^1.5.4",
+    "pino": "^9.4.0"
+  }
+}

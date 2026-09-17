@@ -1,0 +1,117 @@
+{
+  "entities": {
+    "TeamUser": {
+      "title": "TeamUser",
+      "description": "Usuário da equipe do sistema",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "vendedor"] },
+        "lastLoginAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "role"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Lead capturado com dados de contato e qualificação",
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" },
+        "categoria": { "type": "string" },
+        "endereco": { "type": "string" },
+        "cidade": { "type": "string" },
+        "estado": { "type": "string" },
+        "telefone": { "type": "string" },
+        "site": { "type": "string" },
+        "semSite": { "type": "boolean" },
+        "siteRuim": { "type": "boolean" },
+        "avaliacoes": { "type": "number" },
+        "nota": { "type": "number" },
+        "poucasAvaliacoes": { "type": "boolean" },
+        "notaBaixa": { "type": "boolean" },
+        "whatsappStatus": { "type": "string" },
+        "score": { "type": "number" },
+        "searchId": { "type": "string" },
+        "projectName": { "type": "string" },
+        "capturedBy": { "type": "string" },
+        "capturedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nome", "telefone"]
+    },
+    "Template": {
+      "title": "Template",
+      "description": "Template de mensagem para envio via WhatsApp",
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" },
+        "texto": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["nome", "texto"]
+    },
+    "Batch": {
+      "title": "Batch",
+      "description": "Campanha ou lote de disparos",
+      "type": "object",
+      "properties": {
+        "templateId": { "type": "string" },
+        "leadIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      }
+    },
+    "Search": {
+      "title": "Search",
+      "description": "Execução de busca e scraping de leads",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "params": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "error": { "type": "string" }
+      }
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Registro de auditoria de operações",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "acao": { "type": "string" },
+        "detalhes": { "type": "object" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/teamUsers/{uid}": {
+      "schema": "TeamUser",
+      "description": "Usuários e papéis da equipe"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Lista central de leads capturados"
+    },
+    "/templates/{templateId}": {
+      "schema": "Template",
+      "description": "Modelos de mensagens"
+    },
+    "/batches/{batchId}": {
+      "schema": "Batch",
+      "description": "Lotes de disparos"
+    },
+    "/searches/{runId}": {
+      "schema": "Search",
+      "description": "Histórico de buscas"
+    },
+    "/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Logs de auditoria"
+    }
+  }
+}

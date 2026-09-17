@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return autenticado() && (
+        request.auth.token.email.lower() == "kaiquelcorrea@gmail.com" ||
+        (exists(/databases/$(database)/documents/teamUsers/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/teamUsers/$(request.auth.uid)).data.role == "admin")
+      );
+    }
+
+    match /teamUsers/{uid} {
+      allow read: if autenticado();
+      allow write: if autenticado() && (request.auth.uid == uid || isAdmin());
+    }
+
+    match /leads/{leadId} {
+      allow read: if autenticado();
+      allow create, update, delete: if autenticado();
+    }
+
+    match /searches/{runId} {
+      allow read: if autenticado();
+      allow create, update: if autenticado();
+      allow delete: if isAdmin();
+    }
+
+    match /templates/{templateId} {
+      allow read: if autenticado();
+      allow create, update: if autenticado();
+      allow delete: if isAdmin();
+    }
+
+    match /batches/{batchId} {
+      allow read: if autenticado();
+      allow create, update: if autenticado();
+      allow delete: if isAdmin();
+      match /items/{leadId} {
+        allow read: if autenticado();
+        allow create, update: if autenticado();
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /auditLogs/{logId} {
+      allow read: if autenticado();
+      allow create: if autenticado();
+      allow update, delete: if false;
+    }
+
+    match /test/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Nega escrita para outros caminhos não mapeados
+    match /{document=**} {
+      allow read: if autenticado();
+      allow write: if false;
+    }
+  }
+}
+
